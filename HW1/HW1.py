@@ -1,0 +1,130 @@
+import numpy as np
+import math
+
+# For Question 10, to use pi directly from the math library
+pi = math.pi
+
+print("## Question 1")
+A = np.array([[1, 4], [2, 5], [3, 6]])
+B = np.array([[0, -2], [-1, -3], [1, -4]])
+print(A + B)
+
+print("\n## Question 2")
+A = np.array([[1, 2], [2, 3]])
+B = np.array([[-1, 0], [1, 1]])
+print(A - B)
+
+print("\n## Question 3")
+A = np.array([[1, 2, 0], [3, -1, -2]])
+C = 3 * A
+print(C)
+
+print("\n## Question 4")
+# Note: The original R code uses matrix multiplication (%*%) on two 3x2 matrices,
+# which is mathematically impossible. The operation will fail.
+# Element-wise multiplication (*) is possible and shown below, as it was likely the intent.
+A = np.array([[1, 4], [2, 5], [3, 6]])
+B = np.array([[0, -2], [-1, -3], [1, -4]])
+try:
+    C = A @ B  # This is matrix multiplication in Python
+except ValueError as e:
+    print(f"Matrix multiplication failed as expected: {e}")
+    print("Performing element-wise multiplication instead:")
+    C_elementwise = A * B
+    print(C_elementwise)
+
+print("\n## Question 5")
+A = np.array([[1], [1], [1]])  # 3x1 matrix
+B = np.array([[1, 1, 1]])      # 1x3 matrix
+# Note: @ performs matrix multiplication (inner dimensions must match).
+# The * operator performs element-wise multiplication (requires identical dimensions or broadcasting).
+C = A @ B
+print(C)
+
+print("\n## Question 6")
+A = np.array([[1, 1, 1]])      # 1x3 matrix
+B = np.array([[1], [1], [1]])  # 3x1 matrix
+C = A @ B
+print(C)
+
+print("\n## Question 7")
+A = np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0]])
+B = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+C = A @ B
+print(C)
+
+print("\n## Question 8")
+A = np.array([[1, 5], [2, 0], [3, 1]])
+B = A.T  # .T is the transpose attribute in NumPy
+print(B)
+
+print("\n## Question 9")
+# Note: Python uses 0-based indexing. R's A[3, 1] is A[2, 0] in Python.
+A = np.array([[1, -1], [0, 2], [3, 2]])
+a_31 = A[2, 0]
+a_22 = A[1, 1]
+result = a_31 - a_22
+print(result)
+
+print("\n## Question 10")
+# The np.identity() function is the easiest way to create an identity matrix.
+I = np.identity(3)
+# Note: Python's 3^-1 is written as 1/3.
+A = np.array([[pi, 3, -1],
+              [2, 0, 0],
+              [5, 1/3, 0.5]])
+C = I @ A
+print(C)
+
+print("\n## Question 11")
+known_matrix = np.array([[1, 2],
+                         [2, 3],
+                         [0, 6]])
+# R's known_matrix[1, 2] is known_matrix[0, 1] in Python (0-based)
+# R's known_matrix[3, 1] is known_matrix[2, 0] in Python (0-based)
+y = known_matrix[0, 1]
+x = known_matrix[2, 0]
+print(f"The value of x is: {x}")
+print(f"The value of y is: {y}")
+
+print("\n## Question 12")
+A = np.array([[2, 1],
+              [0, 1]])
+# R's solve(A) for inverse is np.linalg.inv(A) in NumPy
+A_inverse = np.linalg.inv(A)
+print(A_inverse)
+
+print("\n## Question 13")
+B = np.array([[3, 1], [3, 2]])
+# R's det(B) is np.linalg.det(B)
+determinant_B = np.linalg.det(B)
+# R's sum(diag(B)) is np.trace(B)
+trace_B = np.trace(B)
+print(f"The determinant of B is: {determinant_B}")
+print(f"The trace of B is: {trace_B}")
+
+print("\n## Question 16")
+# Note: The original R code for B was incomplete.
+A = np.array([[1, 1, 1, 1]])
+print("Matrix A for Q16:")
+print(A)
+
+
+print("\n## Question 19")
+A = np.array([[1,  1,  1],
+              [1, -1,  1],
+              [1, -1, -1]])
+b = np.array([3, 3, -1])
+# R's solve(A, b) is np.linalg.solve(A, b) for solving linear systems
+x = np.linalg.solve(A, b)
+print(x)
+
+print("\n## Question 20")
+A = np.array([[1,  2, -1, -1],
+              [2, -1, -1,  1],
+              [2,  1,  3, -1],
+              [3,  3,  1,  1]])
+b = np.array([-2, 6, -4, 1])
+# R's solve(A, b) is np.linalg.solve(A, b)
+y = np.linalg.solve(A, b)
+print(y)
