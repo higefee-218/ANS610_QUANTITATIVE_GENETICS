@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{mathtools} % Provides bsmallmatrix and loads amsmath
+\usepackage{graphicx}
+\usepackage{booktabs} % For professional-looking tables
+\usepackage[margin=1in]{geometry} % For setting margins
+
+\title{Solving Linear Systems with Cholesky Decomposition}
+\author{Fei Ge}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+The Cholesky decomposition provides a highly efficient and numerically stable method for solving a system of linear equations of the form $\mathbf{Ax = b}$, provided that $\mathbf{A}$ is a symmetric, positive-definite matrix. The strategy is to avoid the direct computation of the matrix inverse ($\mathbf{A}^{-1}$), which is a slow and often unstable process. Instead, Cholesky decomposition replaces one difficult problem with two much simpler ones.
+
+\section{The Standard Method (Slow)}
+
+The most direct way to solve the system is to first compute the inverse of the matrix $\mathbf{A}$, and then multiply it by the vector $\mathbf{b}$:
+\[ \mathbf{x = A^{-1}b} \]
+For large matrices, such as those used in quantitative genetics (e.g., in the MME), calculating the inverse is computationally very expensive and can lead to an accumulation of numerical errors.
+
+\section{The Cholesky Method (Fast)}
+
+The Cholesky method is a two-step process that is significantly more efficient.
+
+\subsection{Step 1: Decompose the Matrix A}
+First, we perform the Cholesky decomposition on our symmetric, positive-definite matrix $\mathbf{A}$ to find a lower triangular matrix $\mathbf{L}$ such that:
+\[ \mathbf{A = LL^T} \]
+
+\subsection{Step 2: Substitute and Solve}
+Next, we substitute the decomposed form back into the original equation $\mathbf{Ax = b}$:
+\[ \mathbf{(LL^T)x = b} \]
+We can split this into two separate, simpler problems by introducing an intermediate vector $\mathbf{y}$, where we define $\mathbf{L^T x = y}$.
+
+\subsubsection{Forward Substitution}
+First, we solve the system for the intermediate vector $\mathbf{y}$:
+\[ \mathbf{Ly = b} \]
+Because $\mathbf{L}$ is a lower triangular matrix, this system is extremely fast to solve. The first element of $\mathbf{y}$ ($y_1$) can be solved for immediately. This value is then used to solve for $y_2$, and so on, in a process called \textbf{forward substitution}.
+
+\subsubsection{Backward Substitution}
+Once the vector $\mathbf{y}$ is known, we solve the second system to find our final answer, $\mathbf{x}$:
+\[ \mathbf{L^T x = y} \]
+Because $\mathbf{L^T}$ is an upper triangular matrix, this system is also very fast to solve. The last element of $\mathbf{x}$ ($x_n$) is solved for first, and its value is then used to solve for the second-to-last element, and so on, in a process called \textbf{backward substitution}.
+
+\section{Why the Cholesky Method is Better}
+
+\begin{itemize}
+    \item \textbf{Speed:} This two-step substitution process is significantly faster than calculating the full inverse of $\mathbf{A}$. For large systems, the time savings can be enormous, reducing a computation that might take hours to one that takes minutes or seconds.
+    \item \textbf{Numerical Stability:} The Cholesky method is also more numerically stable. This means it is less susceptible to the small rounding errors that can occur during computation, leading to more accurate and reliable results.
+\end{itemize}
+
+% --- EXAMPLE ADDED HERE ---
+\section{Numerical Example}
+
+Let's solve the system $\mathbf{Ax = b}$ where:
+\[ \mathbf{A} = \begin{bmatrix} 4 & 2 \\ 2 & 10 \end{bmatrix} \quad \text{and} \quad \mathbf{b} = \begin{bmatrix} 2 \\ -8 \end{bmatrix} \]
+
+\subsection{Step 1: Cholesky Decomposition of A}
+First, we find the Cholesky decomposition of $\mathbf{A}$. For this matrix, the lower triangular matrix $\mathbf{L}$ is:
+\[ \mathbf{L} = \begin{bmatrix} 2 & 0 \\ 1 & 3 \end{bmatrix} \quad \text{such that} \quad \mathbf{LL^T} = \begin{bmatrix} 4 & 2 \\ 2 & 10 \end{bmatrix} = \mathbf{A} \]
+
+\subsection{Step 2: Forward Substitution (Solve Ly = b)}
+We solve for the intermediate vector $\mathbf{y}$:
+\[ \begin{bmatrix} 2 & 0 \\ 1 & 3 \end{bmatrix} \begin{bmatrix} y_1 \\ y_2 \end{bmatrix} = \begin{bmatrix} 2 \\ -8 \end{bmatrix} \]
+This gives us two simple equations:
+\begin{enumerate}
+    \item $2y_1 = 2 \implies y_1 = 1$
+    \item $y_1 + 3y_2 = -8 \implies 1 + 3y_2 = -8 \implies 3y_2 = -9 \implies y_2 = -3$
+\end{enumerate}
+So, our intermediate vector is $\mathbf{y} = \begin{bsmallmatrix} 1 \\ -3 \end{bsmallmatrix}$.
+
+\subsection{Step 3: Backward Substitution (Solve L\textsuperscript{T}x = y)}
+Now we solve for our final answer $\mathbf{x}$ using $\mathbf{y}$:
+\[ \begin{bmatrix} 2 & 1 \\ 0 & 3 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} 1 \\ -3 \end{bmatrix} \]
+This gives us two more simple equations, which we solve from the bottom up:
+\begin{enumerate}
+    \item $3x_2 = -3 \implies x_2 = -1$
+    \item $2x_1 + x_2 = 1 \implies 2x_1 + (-1) = 1 \implies 2x_1 = 2 \implies x_1 = 1$
+\end{enumerate}
+
+\subsection{Final Solution}
+The solution to the system is $\mathbf{x} = \begin{bsmallmatrix} 1 \\ -1 \end{bsmallmatrix}$.
+
+% --- END OF EXAMPLE ---
+
+\end{document}
