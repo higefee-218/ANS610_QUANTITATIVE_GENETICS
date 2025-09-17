@@ -264,4 +264,26 @@ W =
     \end{itemize}
 \end{itemize}
 
+\subsection*{Conceptual Explanation}
+
+\paragraph{What MM' Represents: The Raw Similarity}
+Think of the $\mathbf{MM'}$ part of the calculation as creating a massive comparison table. It looks at every individual and compares them to every other individual across all SNP markers at once. The number it calculates for any pair of individuals is a raw similarity score. If two individuals both tend to have the same "above-average" or "below-average" alleles at the same markers, they get a high score. If their patterns are opposite, they get a low or negative score. However, this raw score is biased.
+
+\paragraph{What 'k' Represents: A Standard for Fairness}
+The scaling factor 'k' represents the total amount of expected genetic variation from all the markers. Some markers are naturally more variable than others just because of their allele frequencies. A marker with a 50/50 allele frequency is much more variable than a rare marker with a 99/1 frequency. Without an adjustment, those common, high-variance markers would have a much bigger say in the final relationship score, drowning out the information from the rarer markers.
+
+\paragraph{Why We Divide: Getting the True Genetic Relationship}
+Dividing the raw similarity score ($\mathbf{MM'}$) by the total expected variance (k) is a crucial standardization step. By dividing by k, you are essentially saying, "I want to remove the distracting effect of some markers being naturally more variable than others." This scaling process ensures that every marker contributes fairly to the final score. It purifies the raw similarity score, turning it into a standardized genetic relationship. The final result ($\mathbf{G}$) is a relationship matrix that is no longer biased by allele frequencies and behaves like the traditional pedigree-based relationship matrix.
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
